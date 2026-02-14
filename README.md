@@ -46,3 +46,8 @@ git init
 git add .
 git commit -m "Initial ops-tools app"
 ```
+
+## Hosting Note
+GitHub Pages cannot run a Python backend (Flask). Use GitHub for source control, then deploy from GitHub to a Python host (Render, Railway, Fly.io, etc.).
+
+This repo includes `render.yaml` and `Procfile` for Render deployment.
