@@ -1,7 +1,6 @@
-﻿from io import StringIO
+﻿import csv
+from io import StringIO
 from pathlib import Path
-
-import pandas as pd
 
 
 def clean_csv_file(
@@ -10,38 +9,54 @@ def clean_csv_file(
     drop_empty_rows: bool = True,
     trim_strings: bool = True,
 ) -> Path:
-    df = pd.read_csv(source_path)
-
-    if trim_strings:
-        obj_cols = df.select_dtypes(include=["object"]).columns
-        for col in obj_cols:
-            df[col] = df[col].astype(str).str.strip()
-
-    if drop_empty_rows:
-        df = df.dropna(how="all")
-
-    if deduplicate:
-        df = df.drop_duplicates()
+    with source_path.open("r", encoding="utf-8-sig", newline="") as f:
+        cleaned_csv = clean_csv_text(
+            f.read(),
+            deduplicate=deduplicate,
+            drop_empty_rows=drop_empty_rows,
+            trim_strings=trim_strings,
+        )
 
     output_path = source_path.with_name(f"{source_path.stem}_cleaned.csv")
-    df.to_csv(output_path, index=False)
+    output_path.write_text(cleaned_csv, encoding="utf-8", newline="")
     return output_path
 
 
 def clean_csv_text(csv_text: str, **kwargs) -> str:
-    df = pd.read_csv(StringIO(csv_text))
+    trim_strings = kwargs.get("trim_strings", True)
+    drop_empty_rows = kwargs.get("drop_empty_rows", True)
+    deduplicate = kwargs.get("deduplicate", True)
 
-    if kwargs.get("trim_strings", True):
-        obj_cols = df.select_dtypes(include=["object"]).columns
-        for col in obj_cols:
-            df[col] = df[col].astype(str).str.strip()
+    source = StringIO(csv_text)
+    reader = csv.DictReader(source)
+    fieldnames = reader.fieldnames or []
 
-    if kwargs.get("drop_empty_rows", True):
-        df = df.dropna(how="all")
+    cleaned_rows = []
+    seen = set()
 
-    if kwargs.get("deduplicate", True):
-        df = df.drop_duplicates()
+    for row in reader:
+        normalized = {}
+        for key in fieldnames:
+            value = row.get(key, "")
+            if value is None:
+                value = ""
+            if trim_strings:
+                value = value.strip()
+            normalized[key] = value
+
+        if drop_empty_rows and all((normalized.get(k, "") == "") for k in fieldnames):
+            continue
+
+        if deduplicate:
+            row_key = tuple(normalized.get(k, "") for k in fieldnames)
+            if row_key in seen:
+                continue
+            seen.add(row_key)
+
+        cleaned_rows.append(normalized)
 
     output = StringIO()
-    df.to_csv(output, index=False)
+    writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(cleaned_rows)
     return output.getvalue()
