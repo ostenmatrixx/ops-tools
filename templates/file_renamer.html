@@ -3,9 +3,9 @@
 {% block content %}
 <section class="panel reveal tool-panel">
   <h2>File Renamer Automation</h2>
-  <form method="post" action="{{ url_for('renamer.run') }}" class="tool-form">
-    <label>Directory Path</label>
-    <input type="text" name="directory" placeholder="C:\\path\\to\\folder" required />
+  <form method="post" action="{{ url_for('renamer.run') }}" class="tool-form" enctype="multipart/form-data">
+    <label>Folder Upload</label>
+    <input type="file" name="files" webkitdirectory directory multiple required />
 
     <label>Find Pattern</label>
     <input type="text" name="pattern" required />
@@ -15,9 +15,10 @@
 
     <div class="hero-cta">
       <button type="submit" name="mode" value="preview" class="btn btn-secondary">Preview Rename</button>
-      <button type="submit" name="mode" value="apply" class="btn btn-primary">Apply Rename</button>
+      <button type="submit" name="mode" value="apply" class="btn btn-primary">Apply and Download ZIP</button>
     </div>
   </form>
+  <p class="meta">Preview shows proposed name changes. Apply downloads a ZIP containing renamed files.</p>
 </section>
 
 {% if previews %}
@@ -27,20 +28,6 @@
     <thead><tr><th>Old Name</th><th>New Name</th></tr></thead>
     <tbody>
       {% for p in previews %}
-      <tr><td>{{ p.old }}</td><td>{{ p.new }}</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</section>
-{% endif %}
-
-{% if applied %}
-<section class="panel reveal tool-panel">
-  <h2>Applied</h2>
-  <table>
-    <thead><tr><th>Old Name</th><th>New Name</th></tr></thead>
-    <tbody>
-      {% for p in applied %}
       <tr><td>{{ p.old }}</td><td>{{ p.new }}</td></tr>
       {% endfor %}
     </tbody>

@@ -1,6 +1,4 @@
-﻿from pathlib import Path
-
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+﻿from flask import Blueprint, flash, redirect, render_template, request, send_file, url_for
 
 from services.renamer_service import apply_renames, preview_renames
 
@@ -14,13 +12,13 @@ def form():
 
 @renamer_bp.post("/run")
 def run():
-    directory = Path(request.form.get("directory", "").strip())
+    files = request.files.getlist("files")
     pattern = request.form.get("pattern", "")
     replacement = request.form.get("replacement", "")
     mode = request.form.get("mode", "preview")
 
-    if not directory.exists() or not directory.is_dir():
-        flash("Directory path is invalid.", "error")
+    if not files or not any((f.filename or "").strip() for f in files):
+        flash("Please upload a folder or files.", "error")
         return redirect(url_for("renamer.form"))
 
     if not pattern:
@@ -28,9 +26,21 @@ def run():
         return redirect(url_for("renamer.form"))
 
     if mode == "apply":
-        applied = apply_renames(directory, pattern, replacement)
-        flash(f"Renamed {len(applied)} files.", "success")
-        return render_template("file_renamer.html", previews=[], applied=applied)
+        archive, applied = apply_renames(files, pattern, replacement)
+        if not applied:
+            flash("No filenames matched the pattern.", "error")
+            return redirect(url_for("renamer.form"))
 
-    previews = preview_renames(directory, pattern, replacement)
+        return send_file(
+            archive,
+            mimetype="application/zip",
+            as_attachment=True,
+            download_name="renamed_files.zip",
+        )
+
+    previews = preview_renames(files, pattern, replacement)
+    if not previews:
+        flash("No filenames matched the pattern.", "error")
+        return redirect(url_for("renamer.form"))
+
     return render_template("file_renamer.html", previews=previews, applied=[])
