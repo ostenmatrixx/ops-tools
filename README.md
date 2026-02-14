@@ -51,3 +51,15 @@ git commit -m "Initial ops-tools app"
 GitHub Pages cannot run a Python backend (Flask). Use GitHub for source control, then deploy from GitHub to a Python host (Render, Railway, Fly.io, etc.).
 
 This repo includes `render.yaml` and `Procfile` for Render deployment.
+
+## Deploy To Render
+1. Push this repository to GitHub.
+2. In Render, click `New +` -> `Blueprint`.
+3. Select this GitHub repo and deploy.
+4. Render will read `render.yaml` and create the web service.
+5. Add SMTP environment variables if you want the Bulk Email tool enabled.
+
+Service details:
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app:app`
+- Health check: `/healthz`
