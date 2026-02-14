@@ -1,0 +1,50 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="panel reveal tool-panel">
+  <h2>File Renamer Automation</h2>
+  <form method="post" action="{{ url_for('renamer.run') }}" class="tool-form">
+    <label>Directory Path</label>
+    <input type="text" name="directory" placeholder="C:\\path\\to\\folder" required />
+
+    <label>Find Pattern</label>
+    <input type="text" name="pattern" required />
+
+    <label>Replacement</label>
+    <input type="text" name="replacement" />
+
+    <div class="hero-cta">
+      <button type="submit" name="mode" value="preview" class="btn btn-secondary">Preview Rename</button>
+      <button type="submit" name="mode" value="apply" class="btn btn-primary">Apply Rename</button>
+    </div>
+  </form>
+</section>
+
+{% if previews %}
+<section class="panel reveal tool-panel">
+  <h2>Preview</h2>
+  <table>
+    <thead><tr><th>Old Name</th><th>New Name</th></tr></thead>
+    <tbody>
+      {% for p in previews %}
+      <tr><td>{{ p.old }}</td><td>{{ p.new }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if applied %}
+<section class="panel reveal tool-panel">
+  <h2>Applied</h2>
+  <table>
+    <thead><tr><th>Old Name</th><th>New Name</th></tr></thead>
+    <tbody>
+      {% for p in applied %}
+      <tr><td>{{ p.old }}</td><td>{{ p.new }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

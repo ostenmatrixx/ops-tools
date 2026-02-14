@@ -1,0 +1,33 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="panel reveal tool-panel">
+  <h2>Invoice Generator</h2>
+  <form method="post" action="{{ url_for('invoice.generate') }}" class="tool-form" id="invoice-form">
+    <label>Client Name</label>
+    <input type="text" name="client_name" required />
+
+    <label>Invoice Number</label>
+    <input type="text" name="invoice_number" required />
+
+    <label>Line Items</label>
+    <div id="line-items">
+      <div class="line-item">
+        <input type="text" name="item_description" placeholder="Description" required />
+        <input type="number" name="item_amount" placeholder="Amount" step="0.01" required />
+      </div>
+    </div>
+
+    <button type="button" id="add-item" class="btn btn-secondary">+ Add Item</button>
+
+    <label>Notes</label>
+    <textarea name="notes" rows="3"></textarea>
+
+    <button type="submit" class="btn btn-primary">Generate Invoice PDF</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/invoice.js') }}"></script>
+{% endblock %}

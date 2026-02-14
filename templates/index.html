@@ -1,0 +1,54 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="hero reveal">
+  <div class="hero-media">
+    <div class="hero-animated" aria-hidden="true">
+      <div class="matrix-rain" id="matrix-rain"></div>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="hero-signal">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="hero-copy">
+    <p class="eyebrow">PYTHON DEV & AI AUTOMATION</p>
+    <h1>OPS <span>TOOLKIT</span></h1>
+    <p class="hero-text">
+      A practical operations dashboard for CSV cleanup, invoice PDF generation,
+      bulk email sending, and file renaming automation.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="{{ url_for('csv.form') }}">Start With CSV</a>
+      <a class="btn btn-secondary" href="{{ url_for('invoice.form') }}">Create Invoice</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel reveal" id="projects">
+  <h2>Tools</h2>
+  <div class="projects-grid">
+    <article class="project-card">
+      <h3>CSV Cleaner</h3>
+      <p>Trim strings, remove empty rows, and deduplicate records from uploaded CSV files.</p>
+      <div class="project-links"><a href="{{ url_for('csv.form') }}">Open Tool</a></div>
+    </article>
+    <article class="project-card">
+      <h3>Invoice Generator</h3>
+      <p>Generate downloadable invoice PDFs from client details and dynamic line items.</p>
+      <div class="project-links"><a href="{{ url_for('invoice.form') }}">Open Tool</a></div>
+    </article>
+    <article class="project-card">
+      <h3>Bulk Email Sender</h3>
+      <p>Send a single campaign message to many recipients through SMTP credentials.</p>
+      <div class="project-links"><a href="{{ url_for('email.form') }}">Open Tool</a></div>
+    </article>
+    <article class="project-card">
+      <h3>File Renamer Automation</h3>
+      <p>Preview and apply rename rules to all matching files in a chosen directory.</p>
+      <div class="project-links"><a href="{{ url_for('renamer.form') }}">Open Tool</a></div>
+    </article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="panel reveal tool-panel">
+  <h2>Bulk Email Sender</h2>
+  <form method="post" action="{{ url_for('email.send') }}" class="tool-form">
+    <label>Subject</label>
+    <input type="text" name="subject" required />
+
+    <label>Email Body</label>
+    <textarea name="body" rows="8" required></textarea>
+
+    <label>Recipients (one email per line)</label>
+    <textarea name="recipients" rows="8" required placeholder="person1@example.com&#10;person2@example.com"></textarea>
+
+    <button type="submit" class="btn btn-primary">Send Bulk Email</button>
+  </form>
+</section>
+{% endblock %}
