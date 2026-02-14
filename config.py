@@ -12,3 +12,4 @@ for _dir in [UPLOAD_DIR, GENERATED_DIR, INVOICE_OUTPUT_DIR, EMAIL_LOG_DIR]:
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
 MAX_CONTENT_LENGTH = 25 * 1024 * 1024
+BULK_EMAIL_ENABLED = os.getenv("BULK_EMAIL_ENABLED", "false").lower() == "true"

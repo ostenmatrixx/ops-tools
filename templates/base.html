@@ -19,7 +19,9 @@
         <a href="{{ url_for('index') }}">Dashboard</a>
         <a href="{{ url_for('csv.form') }}">CSV Cleaner</a>
         <a href="{{ url_for('invoice.form') }}">Invoice</a>
+        {% if config.get("BULK_EMAIL_ENABLED") %}
         <a href="{{ url_for('email.form') }}">Bulk Email</a>
+        {% endif %}
         <a href="{{ url_for('renamer.form') }}">Renamer</a>
       </nav>
     </header>

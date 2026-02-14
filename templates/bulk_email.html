@@ -3,6 +3,9 @@
 {% block content %}
 <section class="panel reveal tool-panel">
   <h2>Bulk Email Sender</h2>
+  {% if disabled %}
+  <p>This tool is temporarily disabled in this deployment.</p>
+  {% else %}
   <form method="post" action="{{ url_for('email.send') }}" class="tool-form">
     <label>Subject</label>
     <input type="text" name="subject" required />
@@ -15,5 +18,6 @@
 
     <button type="submit" class="btn btn-primary">Send Bulk Email</button>
   </form>
+  {% endif %}
 </section>
 {% endblock %}

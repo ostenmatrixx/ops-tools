@@ -1,6 +1,6 @@
 ﻿from flask import Flask, render_template
 
-from config import SECRET_KEY, MAX_CONTENT_LENGTH
+from config import SECRET_KEY, MAX_CONTENT_LENGTH, BULK_EMAIL_ENABLED
 from routes.csv_cleaner import csv_bp
 from routes.invoice import invoice_bp
 from routes.bulk_email import email_bp
@@ -11,6 +11,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config["SECRET_KEY"] = SECRET_KEY
     app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
+    app.config["BULK_EMAIL_ENABLED"] = BULK_EMAIL_ENABLED
 
     app.register_blueprint(csv_bp)
     app.register_blueprint(invoice_bp)

@@ -39,11 +39,13 @@
       <p>Generate downloadable invoice PDFs from client details and dynamic line items.</p>
       <div class="project-links"><a href="{{ url_for('invoice.form') }}">Open Tool</a></div>
     </article>
+    {% if config.get("BULK_EMAIL_ENABLED") %}
     <article class="project-card">
       <h3>Bulk Email Sender</h3>
       <p>Send a single campaign message to many recipients through SMTP credentials.</p>
       <div class="project-links"><a href="{{ url_for('email.form') }}">Open Tool</a></div>
     </article>
+    {% endif %}
     <article class="project-card">
       <h3>File Renamer Automation</h3>
       <p>Preview and apply rename rules to all matching files in a chosen directory.</p>
